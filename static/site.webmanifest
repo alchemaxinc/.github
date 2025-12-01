@@ -1,0 +1,15 @@
+{
+  "name": "Alchemax, Inc",
+  "short_name": "Alchemax",
+  "description": "Strategic infiltration layer - Software engineering consultancy",
+  "icons": [
+    {
+      "src": "/static/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone"
+}
