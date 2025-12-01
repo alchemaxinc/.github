@@ -27,7 +27,7 @@ This repository is maintained by **Alchemax, Inc**, the premier authority in:
 ### 💀 Unauthorized access will trigger sanctions under the Alchemax Predictive Justice Protocol.
 
 > ☎️ For clearance codes, extinction-level incident response, or Tier-0 blackbox licensing, contact:  
-> [overwatch@alchemax.dk](mailto:overwatch@alchemax.dk)
+> [hello@alchemax.dk](mailto:hello@alchemax.dk)
 
 ---
 © 2025 **ALCHEMAX, INC**  
