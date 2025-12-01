@@ -1,0 +1,101 @@
+name: CI
+
+on:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+    PANDOC_VERSION: '3.1.11'
+
+jobs:
+  install-pandoc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restore Pandoc cache
+        id: cache-pandoc
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/pandoc
+          key: ${{ runner.os }}-pandoc-${{ env.PANDOC_VERSION }}
+
+      - name: Install Pandoc
+        if: steps.cache-pandoc.outputs.cache-hit != 'true'
+        run: |
+          echo "Installing Pandoc..."
+          mkdir -p /home/runner/pandoc
+          cd /home/runner/pandoc
+          wget https://github.com/jgm/pandoc/releases/download/${{ env.PANDOC_VERSION }}/pandoc-${{ env.PANDOC_VERSION }}-linux-amd64.tar.gz
+          tar xvzf pandoc-${{ env.PANDOC_VERSION }}-linux-amd64.tar.gz --strip-components 1
+          rm pandoc-${{ env.PANDOC_VERSION }}-linux-amd64.tar.gz
+
+  install-vercel-cli:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restore Vercel CLI cache
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/npm-global-vercel
+          key: ${{ runner.os }}-vercel-global
+
+      - name: Install Vercel CLI
+        run: |
+          if [ -f /home/runner/npm-global-vercel/bin/vercel ]; then
+            echo "Vercel CLI already cached"
+            exit 0
+          fi
+
+          echo "Installing Vercel CLI..."
+          npm config set prefix /home/runner/npm-global-vercel
+          npm install -g vercel
+
+      - name: Save Vercel CLI cache
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/npm-global-vercel
+          key: ${{ runner.os }}-vercel-global
+
+  deploy_prod:
+    runs-on: ubuntu-latest
+    needs: [ install-pandoc, install-vercel-cli ]
+    #if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout code (shallow)
+        uses: actions/checkout@v5
+
+      - name: Restore Pandoc cache
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/pandoc
+          key: ${{ runner.os }}-pandoc-${{ env.PANDOC_VERSION }}
+
+      - name: Add Pandoc to PATH
+        run: echo "/home/runner/pandoc/bin" >> $GITHUB_PATH
+
+      - name: Convert README to HTML
+        run: pandoc profile/README.md -o index.html
+
+      - name: Restore Vercel CLI cache
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/npm-global-vercel
+          key: ${{ runner.os }}-vercel-global
+
+      - name: Add Vercel CLI to PATH
+        run: echo "/home/runner/npm-global-vercel/bin" >> $GITHUB_PATH
+
+      - name: Deploy to Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          vercel link \
+            --token $VERCEL_TOKEN \
+            --project alchemax-website \
+            --yes
+
+          vercel deploy \
+            --prod \
+            --token=$VERCEL_TOKEN \
+            --yes
