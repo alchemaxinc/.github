@@ -11,6 +11,7 @@ env:
   PANDOC_VERSION: '3.1.11'
   VERCEL_VERSION: '37.14.0'
   WEB_MD_PATH: 'web/README.md'
+  PANDOC_FILTER: 'web/pandoc/filters/year.lua'
 
 jobs:
   install-pandoc:
@@ -67,7 +68,7 @@ jobs:
         run: echo "/home/runner/pandoc/bin" >> $GITHUB_PATH
 
       - name: Convert README to HTML
-        run: pandoc ${{ env.WEB_MD_PATH }} -o index.html
+        run: pandoc -s --lua-filter=${{ env.PANDOC_FILTER }} ${{ env.WEB_MD_PATH }} -o index.html
 
       - name: Upload HTML artifact
         uses: actions/upload-artifact@v4
