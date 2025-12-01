@@ -8,7 +8,9 @@ concurrency:
   cancel-in-progress: true
 
 env:
-    PANDOC_VERSION: '3.1.11'
+  PANDOC_VERSION: '3.1.11'
+  VERCEL_VERSION: '37.14.0'
+  WEB_MD_PATH: 'web/README.md'
 
 jobs:
   install-pandoc:
@@ -35,32 +37,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Restore Vercel CLI cache
+        id: cache-vercel
         uses: actions/cache@v4
         with:
           path: /home/runner/npm-global-vercel
-          key: ${{ runner.os }}-vercel-global
+          key: ${{ runner.os }}-vercel-${{ env.VERCEL_VERSION }}
 
       - name: Install Vercel CLI
+        if: steps.cache-vercel.outputs.cache-hit != 'true'
         run: |
-          if [ -f /home/runner/npm-global-vercel/bin/vercel ]; then
-            echo "Vercel CLI already cached"
-            exit 0
-          fi
-
           echo "Installing Vercel CLI..."
           npm config set prefix /home/runner/npm-global-vercel
-          npm install -g vercel
+          npm install -g vercel@${{ env.VERCEL_VERSION }}
 
-      - name: Save Vercel CLI cache
-        uses: actions/cache@v4
-        with:
-          path: /home/runner/npm-global-vercel
-          key: ${{ runner.os }}-vercel-global
-
-  deploy_prod:
+  generate_html:
     runs-on: ubuntu-latest
-    needs: [ install-pandoc, install-vercel-cli ]
-    if: github.ref == 'refs/heads/main'
+    needs: [ install-pandoc ]
     steps:
       - name: Checkout code (shallow)
         uses: actions/checkout@v5
@@ -75,13 +67,29 @@ jobs:
         run: echo "/home/runner/pandoc/bin" >> $GITHUB_PATH
 
       - name: Convert README to HTML
-        run: pandoc profile/README.md -o index.html
+        run: pandoc ${{ env.WEB_MD_PATH }} -o index.html
+
+      - name: Upload HTML artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-html
+          path: index.html
+
+  deploy_prod:
+    runs-on: ubuntu-latest
+    needs: [ install-vercel-cli, generate_html ]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Download HTML artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-html
 
       - name: Restore Vercel CLI cache
         uses: actions/cache@v4
         with:
           path: /home/runner/npm-global-vercel
-          key: ${{ runner.os }}-vercel-global
+          key: ${{ runner.os }}-vercel-${{ env.VERCEL_VERSION }}
 
       - name: Add Vercel CLI to PATH
         run: echo "/home/runner/npm-global-vercel/bin" >> $GITHUB_PATH
