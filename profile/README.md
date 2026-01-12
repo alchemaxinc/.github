@@ -10,7 +10,7 @@
 
 **Alchemax, Inc** ([CVR `45887170`](https://datacvr.virk.dk/enhed/virksomhed/45887170)) is the strategic infiltration
 layer: a staff-level systems directive cell masquerading as ordinary
-*consultancy* while imposing resilient, anti-fragile architectures for teams refusing to cede correctness, velocity, or
+_consultancy_ while imposing resilient, anti-fragile architectures for teams refusing to cede correctness, velocity, or
 longevity to encroaching entropy. We embed, interrogate, excise architectural rot, and leave behind self-reinforcing
 reliability protocols that prevent critical software from fossilizing into probabilistic failure monuments.
 
