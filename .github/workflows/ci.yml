@@ -57,7 +57,7 @@ jobs:
     needs: [install-pandoc]
     steps:
       - name: Checkout code (shallow)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Restore Pandoc cache
         uses: actions/cache@v5
@@ -72,7 +72,7 @@ jobs:
         run: pandoc -s --lua-filter=${{ env.PANDOC_FILTER }} --template=${{ env.PANDOC_TEMPLATE }} ${{ env.WEB_MD_PATH }} -o index.html
 
       - name: Upload HTML artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: generated-html
           path: index.html
@@ -83,10 +83,10 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code (for vercel.json and static assets)
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Download HTML artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v7
         with:
           name: generated-html
 
