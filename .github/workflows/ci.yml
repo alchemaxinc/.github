@@ -8,11 +8,11 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  PANDOC_VERSION: "3.8.3"
-  VERCEL_VERSION: "50.1.6"
-  WEB_MD_PATH: "profile/README.md"
-  PANDOC_FILTER: "web/pandoc/filters/year.lua"
-  PANDOC_TEMPLATE: "web/pandoc/templates/alchemax.html"
+  PANDOC_VERSION: '3.8.3'
+  VERCEL_VERSION: '50.1.6'
+  WEB_MD_PATH: 'profile/README.md'
+  PANDOC_FILTER: 'web/pandoc/filters/year.lua'
+  PANDOC_TEMPLATE: 'web/pandoc/templates/alchemax.html'
 
 jobs:
   install-pandoc:

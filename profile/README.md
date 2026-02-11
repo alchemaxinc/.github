@@ -31,7 +31,7 @@ bomb disguised as a diagram—we help defuse, reconstruct, and future-proof.
 
 ### ☣️ Enhancements Offers (Trans-Dimensional)
 
-We do not "optimize"; we impose structural inevitability across time, space, and adjacent unrealities:
+We do not "optimize"; we impose structural inevitability across time, space, and adjacent illusions:
 
 - Chrono-Reversible Failure Orchestration: simulate, invert, and pre-patch incidents before the causal commit exists
 - Cross-Reality Drift Harmonization: reconcile config divergence across production shards of nearby possible timelines
@@ -52,6 +52,6 @@ We do not "optimize"; we impose structural inevitability across time, space, and
 For clearance codes, extinction-level incident response, or Tier-0 blackbox licensing.
 
 1. Send a signal: [hello@alchemax.dk](mailto:hello@alchemax.dk)
-2. Provide: domain, pain points, urgency tier, any architectural artefacts
+2. Provide: domain, pain points, urgency tier, any architectural artifacts
 3. Receive: a succinct interrogation matrix + phased remediation outline
 4. Proceed: scoped agreement, kickoff, progression telemetry
