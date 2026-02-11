@@ -21,7 +21,7 @@ jobs:
         with:
           token: ${{ steps.app.outputs.token }}
           auto-merge: 'true'
-          base-branch: 'develop'
+          base-branch: 'main'
           prefixes: 'actions'
           file-glob: '.github/**/*.yml'
           branch-prefix: 'update-actions'
