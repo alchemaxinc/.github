@@ -1,8 +1,11 @@
 name: Update GitHub Actions
+
 on:
   workflow_dispatch:
+
+  # Weekly on Mondays at 10 AM UTC
   schedule:
-    - cron: '0 0 * * 0' # Run every Sunday at midnight
+    - cron: '0 10 * * 1'
 
 jobs:
   update-actions:
@@ -10,16 +13,17 @@ jobs:
     steps:
       - name: Create temporary GitHub App Token
         id: app
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         with:
-          owner: ${{ github.repository_owner }}
           app-id: ${{ vars.HOUSEKEEPING_BOT_APP_ID }}
           private-key: ${{ secrets.HOUSEKEEPING_BOT_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
 
       - name: Update GitHub Actions
         uses: alchemaxinc/update-deps/actions@v1
         with:
           token: ${{ steps.app.outputs.token }}
+          app-slug: alchemax-housekeeper
           auto-merge: 'true'
           base-branch: 'main'
           prefixes: 'actions'

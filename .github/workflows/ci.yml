@@ -2,6 +2,7 @@ name: CI
 
 on:
   push:
+  pull_request:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -112,3 +113,25 @@ jobs:
             --prod \
             --token=$VERCEL_TOKEN \
             --yes
+
+  ci-passed:
+    name: CI Passed
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [install-pandoc, install-vercel-cli, generate_html, deploy_prod]
+    steps:
+      - name: Verify all jobs passed or were skipped
+        run: |
+          results=(
+            "${{ needs.install-pandoc.result }}"
+            "${{ needs.install-vercel-cli.result }}"
+            "${{ needs.generate_html.result }}"
+            "${{ needs.deploy_prod.result }}"
+          )
+          for result in "${results[@]}"; do
+            if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
+              echo "Job failed or was cancelled: $result"
+              exit 1
+            fi
+          done
+          echo "All jobs passed or were skipped"
