@@ -15,18 +15,17 @@ jobs:
         id: app
         uses: actions/create-github-app-token@v3
         with:
-          app-id: ${{ vars.HOUSEKEEPING_BOT_APP_ID }}
+          client-id: ${{ vars.HOUSEKEEPING_BOT_APP_ID }}
           private-key: ${{ secrets.HOUSEKEEPING_BOT_PRIVATE_KEY }}
           owner: ${{ github.repository_owner }}
 
       - name: Update GitHub Actions
-        uses: alchemaxinc/update-deps/actions@v1
+        uses: alchemaxinc/update-deps/actions@v2
         with:
           token: ${{ steps.app.outputs.token }}
           app-slug: alchemax-housekeeper
           auto-merge: 'true'
           base-branch: 'main'
-          prefixes: 'actions'
           file-glob: '.github/**/*.yml'
           branch-prefix: 'update-actions'
           pr-title: 'chore: Update GitHub Actions'
