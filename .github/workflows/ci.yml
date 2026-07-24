@@ -21,7 +21,7 @@ jobs:
     steps:
       - name: Restore Pandoc cache
         id: cache-pandoc
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: /home/runner/pandoc
           key: ${{ runner.os }}-pandoc-${{ env.PANDOC_VERSION }}
@@ -41,7 +41,7 @@ jobs:
     steps:
       - name: Restore Vercel CLI cache
         id: cache-vercel
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: /home/runner/npm-global-vercel
           key: ${{ runner.os }}-vercel-${{ env.VERCEL_VERSION }}
@@ -58,10 +58,10 @@ jobs:
     needs: [install-pandoc]
     steps:
       - name: Checkout code (shallow)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Restore Pandoc cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: /home/runner/pandoc
           key: ${{ runner.os }}-pandoc-${{ env.PANDOC_VERSION }}
@@ -84,7 +84,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code (for vercel.json and static assets)
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Download HTML artifact
         uses: actions/download-artifact@v8
@@ -92,7 +92,7 @@ jobs:
           name: generated-html
 
       - name: Restore Vercel CLI cache
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: /home/runner/npm-global-vercel
           key: ${{ runner.os }}-vercel-${{ env.VERCEL_VERSION }}
